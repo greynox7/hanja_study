@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한자 공부 퀴즈</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Noto Sans KR', sans-serif; text-align: center; padding: 20px; background-color: #f0f2f5; }
+        .container { max-width: 600px; margin: 0 auto; }
+        h1 { color: #2c3e50; margin-bottom: 30px; }
+        .card { 
+            background: white; 
+            padding: 2rem; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .level-btn {
+            display: block;
+            width: 80%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 1.2rem;
+            color: white;
+            background-color: #3498db;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-align: center;
+        }
+        .level-btn:hover { background-color: #2980b9; }
+        .instruction { color: #7f8c8d; margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏯 한자 급수 퀴즈</h1>
+        <p class="instruction">도전할 급수를 선택하세요!</p>
+        
+        <div class="card">
+            {% for level in levels %}
+            <a href="/quiz/{{ level }}" class="level-btn">{{ level }} 도전하기</a>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
