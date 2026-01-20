@@ -4,79 +4,168 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ level }} 퀴즈</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Noto Sans KR', sans-serif; text-align: center; padding: 20px; background-color: #f0f2f5; }
-        .container { max-width: 600px; margin: 0 auto; }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            text-align: center; 
+            margin: 0;
+            padding: 20px; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .container { max-width: 500px; margin: 0 auto; }
         
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #555;
+            font-weight: bold;
+        }
+
         /* 진행바 스타일 */
         .progress-container {
             width: 100%;
-            background-color: #ddd;
+            background-color: rgba(255,255,255,0.5);
             border-radius: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            height: 12px;
             overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
         }
         .progress-bar {
-            height: 10px;
+            height: 100%;
             width: 0%;
-            background-color: #2ecc71;
-            transition: width 0.3s;
+            background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
+            transition: width 0.4s ease;
+            border-radius: 10px;
         }
         
         .quiz-card { 
             background: white; 
-            padding: 2rem; 
-            border-radius: 15px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            padding: 2.5rem 2rem; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
             position: relative;
         }
         
         .hanja-display {
-            font-size: 6rem;
+            font-family: 'Nanum Myeongjo', serif;
+            font-size: 7rem;
             font-weight: bold;
-            margin: 20px 0;
+            margin: 10px 0 40px 0;
             color: #2c3e50;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
         }
         
         .option-btn {
             display: block;
             width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            font-size: 1.1rem;
+            padding: 16px;
+            margin: 12px 0;
+            font-size: 1.15rem;
             background-color: white;
-            border: 2px solid #3498db;
-            color: #3498db;
-            border-radius: 10px;
+            border: 2px solid #e1e8ed;
+            color: #555;
+            border-radius: 15px;
             cursor: pointer;
             transition: all 0.2s;
+            font-weight: 500;
         }
         .option-btn:hover {
-            background-color: #eaf6fd;
+            background-color: #f8f9fa;
+            border-color: #bdc3c7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
         .option-btn.correct {
             background-color: #2ecc71;
             border-color: #2ecc71;
             color: white;
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.4);
         }
         .option-btn.wrong {
-            background-color: #e74c3c;
-            border-color: #e74c3c;
+            background-color: #ff6b6b;
+            border-color: #ff6b6b;
             color: white;
+            animation: shake 0.4s;
         }
         
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
         .result-screen {
             display: none;
         }
-        .score-text { font-size: 2rem; font-weight: bold; margin: 20px 0; }
+        .score-text { font-size: 2.5rem; font-weight: bold; margin: 20px 0; color: #2c3e50; }
+        
+        /* 오답노트 스타일 */
+        .wrong-answer-list {
+            text-align: left;
+            margin-top: 30px;
+            padding: 0;
+            border: none;
+            background: none;
+        }
+        .wrong-item {
+            background: #fff5f5;
+            border: 1px solid #ffdede;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .wrong-hanja {
+            font-family: 'Nanum Myeongjo', serif;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #c0392b;
+            margin-right: 20px;
+            width: 60px;
+            text-align: center;
+        }
+        .wrong-detail { flex: 1; font-size: 1rem; }
+        .wrong-label { font-weight: bold; color: #95a5a6; font-size: 0.8rem; margin-bottom: 2px;}
+        .ans-user { color: #e74c3c; text-decoration: line-through; margin-right: 10px; font-weight: bold;}
+        .ans-correct { color: #27ae60; font-weight: bold; }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
         .home-btn {
-            display: inline-block;
-            padding: 10px 20px;
+            flex: 1;
+            padding: 15px;
             background-color: #34495e;
             color: white;
             text-decoration: none;
-            border-radius: 5px;
-            margin-top: 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+        .home-btn:hover { opacity: 0.9; }
+        .home-btn.secondary { background-color: #95a5a6; }
+
+        /* 모바일 반응형 스타일 */
+        @media (max-width: 480px) {
+            body { padding: 15px; }
+            .quiz-card { padding: 1.5rem; }
+            .hanja-display { font-size: 5rem; margin: 10px 0 30px 0; }
+            .option-btn { padding: 14px; font-size: 1rem; }
+            .score-text { font-size: 2rem; }
+            .wrong-hanja { font-size: 1.8rem; width: 50px; margin-right: 15px; }
+            .wrong-detail { font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -84,7 +173,7 @@
     <div class="container">
         <!-- 퀴즈 화면 -->
         <div id="quiz-screen">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <div class="header-info">
                 <span>{{ level }}</span>
                 <span id="progress-text">1 / {{ quiz_data|length }}</span>
             </div>
@@ -103,9 +192,21 @@
         <div id="result-screen" class="result-screen">
             <div class="quiz-card">
                 <h2>퀴즈 완료! 🎉</h2>
-                <p class="score-text">점수: <span id="final-score">0</span>점</p>
-                <p id="final-message"></p>
-                <a href="/" class="home-btn">다시 하기</a>
+                <p class="score-text"><span id="final-score">0</span>점</p>
+                <p id="final-message" style="color: #7f8c8d; font-size: 1.1rem;"></p>
+                
+                <!-- 오답 노트 영역 -->
+                <div id="wrong-answers-area" style="display: none;">
+                    <h3 style="margin-top: 30px; color: #c0392b; border-bottom: 2px solid #f1f1f1; padding-bottom: 10px;">📝 오답 노트</h3>
+                    <div class="wrong-answer-list" id="wrong-answer-list">
+                        <!-- 오답 리스트 들어감 -->
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="/history" class="home-btn secondary">기록 보기</a>
+                    <a href="/" class="home-btn" style="background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%); border: none;">다시 하기</a>
+                </div>
             </div>
         </div>
     </div>
@@ -113,9 +214,11 @@
     <script>
         // 서버에서 전달받은 퀴즈 데이터
         const quizData = {{ quiz_data | tojson }};
+        const currentLevel = "{{ level }}";
         let currentQuestion = 0;
         let score = 0;
-        let isAnswering = false; // 중복 클릭 방지
+        let isAnswering = false;
+        let wrongAnswers = []; // 오답 기록용
 
         function loadQuestion() {
             if (currentQuestion >= quizData.length) {
@@ -132,14 +235,17 @@
             let html = `<div class="hanja-display">${q.hanja}</div>`;
             
             q.options.forEach(opt => {
-                html += `<button class="option-btn" onclick="checkAnswer(this, '${opt}', '${q.answer}')">${opt}</button>`;
+                // 작은따옴표 escape 처리
+                const safeOpt = opt.replace(/'/g, "\\'");
+                const safeAnswer = q.answer.replace(/'/g, "\\'");
+                html += `<button class="option-btn" onclick="checkAnswer(this, '${safeOpt}', '${safeAnswer}', '${q.hanja}')">${opt}</button>`;
             });
 
             document.getElementById('question-area').innerHTML = html;
             isAnswering = false;
         }
 
-        function checkAnswer(btn, selected, correct) {
+        function checkAnswer(btn, selected, correct, hanja) {
             if (isAnswering) return;
             isAnswering = true;
 
@@ -154,13 +260,20 @@
                 buttons.forEach(b => {
                     if (b.innerText === correct) b.classList.add('correct');
                 });
+                
+                // 오답 기록
+                wrongAnswers.push({
+                    hanja: hanja,
+                    userAnswer: selected,
+                    correctAnswer: correct
+                });
             }
 
             // 1초 후 다음 문제
             setTimeout(() => {
                 currentQuestion++;
                 loadQuestion();
-            }, 1000); // 1초 대기
+            }, 1000); 
         }
 
         function showResult() {
@@ -176,6 +289,48 @@
             else msg = "조금 더 노력이 필요해요. 화이팅! 💪";
             
             document.getElementById('final-message').innerText = msg;
+            
+            // 오답 노트 표시
+            if (wrongAnswers.length > 0) {
+                document.getElementById('wrong-answers-area').style.display = 'block';
+                const listContainer = document.getElementById('wrong-answer-list');
+                let html = '';
+                wrongAnswers.forEach(item => {
+                    html += `
+                        <div class="wrong-item">
+                            <div class="wrong-hanja">${item.hanja}</div>
+                            <div class="wrong-detail">
+                                <div class="wrong-label">내가 고른 답</div>
+                                <div class="ans-user">${item.userAnswer}</div>
+                                <div class="wrong-label">정답</div>
+                                <div class="ans-correct">${item.correctAnswer}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                listContainer.innerHTML = html;
+            }
+
+            // 서버에 점수 저장 요청
+            saveScoreToServer(finalScore);
+        }
+        
+        function saveScoreToServer(finalScore) {
+            fetch('/save_score', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    level: currentLevel,
+                    score: finalScore,
+                    correct: score,
+                    total: quizData.length
+                }),
+            })
+            .then(response => response.json())
+            .then(data => console.log('Score saved:', data))
+            .catch((error) => console.error('Error saving score:', error));
         }
 
         // 시작

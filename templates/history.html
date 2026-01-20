@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한자 공부 - 점수 기록</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            text-align: center; 
+            margin: 0;
+            padding: 40px 20px; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .container { max-width: 600px; margin: 0 auto; }
+        
+        h1 { 
+            color: #2c3e50; 
+            margin-bottom: 30px; 
+            font-weight: 700;
+        }
+        .card { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 2rem; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 10px; }
+        
+        th { 
+            background-color: #f1f3f5; 
+            color: #495057; 
+            padding: 15px;
+            font-weight: bold;
+            border-bottom: 2px solid #dee2e6;
+        }
+        th:first-child { border-top-left-radius: 10px; }
+        th:last-child { border-top-right-radius: 10px; }
+        
+        td { padding: 15px; border-bottom: 1px solid #eee; color: #555; }
+        tr:last-child td { border-bottom: none; }
+        
+        .no-record { color: #868e96; margin: 40px 0; }
+        
+        .home-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #34495e;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .home-btn:hover { 
+            background-color: #2c3e50; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .score-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .score-good { background-color: #d4edda; color: #155724; }
+        .score-bad { background-color: #f8d7da; color: #721c24; }
+
+        /* 모바일 반응형 스타일 */
+        @media (max-width: 480px) {
+            body { padding: 20px 10px; }
+            h1 { font-size: 1.5rem; }
+            .card { padding: 1.5rem 1rem; }
+            th, td { padding: 10px 5px; font-size: 0.9rem; }
+            .score-badge { font-size: 0.8rem; padding: 3px 6px; }
+            .home-btn { padding: 10px 20px; font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📜 나의 점수 기록</h1>
+        
+        <div class="card">
+            {% if history %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>급수</th>
+                        <th>점수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in history %}
+                    <tr>
+                        <td>{{ record.date[5:] }}</td> <!-- 연도 제외하고 월-일 시:분 까지만 -->
+                        <td>{{ record.level }}</td>
+                        <td>
+                            <span class="score-badge {{ 'score-good' if record.score >= 80 else 'score-bad' }}">
+                                {{ record.score }}점
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="no-record">아직 기록된 점수가 없습니다.<br>퀴즈를 풀고 실력을 확인해보세요!</p>
+            {% endif %}
+        </div>
+
+        <a href="/" class="home-btn" style="background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%); border: none;">메인으로 돌아가기</a>
+    </div>
+</body>
+</html>

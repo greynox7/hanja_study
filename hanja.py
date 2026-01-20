@@ -1,5 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import random
+import sqlite3
+import datetime
+import os
 from hanja_data import HANJA_DATA
 
 app = Flask(__name__)
@@ -7,11 +10,77 @@ app = Flask(__name__)
 # 시크릿 키 설정 (가볍게 고정값 사용)
 app.secret_key = 'hanja-study-secret'
 
+# 데이터 디렉토리 설정 (절대 경로 사용으로 안전하게)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, 'data')
+
+if not os.path.exists(DATA_DIR):
+    os.makedirs(DATA_DIR)
+
+DB_FILE = os.path.join(DATA_DIR, 'hanja_study.db')
+
+def init_db():
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    # history 테이블 생성
+    c.execute('''CREATE TABLE IF NOT EXISTS history
+                 (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                  date TEXT, 
+                  level TEXT, 
+                  api_score INTEGER,
+                  correct_count INTEGER,
+                  total_count INTEGER)''')
+    conn.commit()
+    conn.close()
+
+# 앱 시작 시 DB 초기화
+init_db()
+
 @app.route('/')
 def home():
     # 데이터에 있는 급수 목록 가져오기
     levels = list(HANJA_DATA.keys())
     return render_template('index.html', levels=levels)
+
+@app.route('/history')
+def history():
+    conn = sqlite3.connect(DB_FILE)
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+    c.execute("SELECT * FROM history ORDER BY id DESC LIMIT 50")
+    rows = c.fetchall()
+    conn.close()
+    
+    formatted_history = []
+    for row in rows:
+        formatted_history.append({
+            "date": row['date'],
+            "level": row['level'],
+            "score": row['api_score'],
+            "correct": row['correct_count'],
+            "total": row['total_count']
+        })
+    return render_template('history.html', history=formatted_history)
+
+@app.route('/save_score', methods=['POST'])
+def save_score():
+    data = request.json
+    level = data.get('level')
+    score = data.get('score')
+    correct = data.get('correct')
+    total = data.get('total')
+    
+    # 한국 시간 대략적으로 맞추기 (서버 설정에 따라 다를 수 있음)
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("INSERT INTO history (date, level, api_score, correct_count, total_count) VALUES (?, ?, ?, ?, ?)",
+              (now, level, score, correct, total))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({"status": "success"})
 
 @app.route('/quiz/<level>')
 def quiz(level):

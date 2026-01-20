@@ -4,49 +4,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>한자 공부 퀴즈</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
-        body { font-family: 'Noto Sans KR', sans-serif; text-align: center; padding: 20px; background-color: #f0f2f5; }
-        .container { max-width: 600px; margin: 0 auto; }
-        h1 { color: #2c3e50; margin-bottom: 30px; }
+        body { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            text-align: center; 
+            margin: 0;
+            padding: 40px 20px; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .container { max-width: 500px; margin: 0 auto; }
+        
+        .logo-area { margin-bottom: 40px; }
+        h1 { 
+            color: #2c3e50; 
+            margin: 10px 0; 
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+        .emoji-logo { font-size: 4rem; display: block; margin-bottom: 10px; }
+        
         .card { 
-            background: white; 
-            padding: 2rem; 
-            border-radius: 15px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
-            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 2.5rem 2rem; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
             display: flex;
             flex-direction: column;
             align-items: center;
+            backdrop-filter: blur(10px);
         }
+        
         .level-btn {
-            display: block;
-            width: 80%;
-            padding: 15px;
-            margin: 10px 0;
-            font-size: 1.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 16px;
+            margin: 8px 0;
+            font-size: 1.1rem;
+            font-weight: bold;
             color: white;
-            background-color: #3498db;
+            background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             text-decoration: none;
             cursor: pointer;
-            transition: background 0.3s;
-            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .level-btn:hover { background-color: #2980b9; }
-        .instruction { color: #7f8c8d; margin-bottom: 30px; }
+        .level-btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .level-btn.history-btn {
+            background: white;
+            color: #555;
+            border: 2px solid #eee;
+            margin-top: 20px;
+        }
+        .level-btn.history-btn:hover {
+            background: #f8f9fa;
+            border-color: #ddd;
+        }
+
+        .instruction { color: #57606f; margin-bottom: 25px; font-size: 0.95rem; }
+
+        /* 모바일 반응형 스타일 */
+        @media (max-width: 480px) {
+            body { padding: 20px 15px; }
+            .emoji-logo { font-size: 3rem; }
+            h1 { font-size: 1.5rem; }
+            .card { padding: 2rem 1.5rem; }
+            .level-btn { padding: 14px; font-size: 1rem; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🏯 한자 급수 퀴즈</h1>
-        <p class="instruction">도전할 급수를 선택하세요!</p>
+        <div class="logo-area">
+            <span class="emoji-logo">🏯</span>
+            <h1>한자 급수 퀴즈</h1>
+            <p style="color: #666;">매일 매일 성장하는 나의 한자 실력</p>
+        </div>
         
         <div class="card">
+            <p class="instruction">도전할 급수를 선택하세요!</p>
+
             {% for level in levels %}
-            <a href="/quiz/{{ level }}" class="level-btn">{{ level }} 도전하기</a>
+            <a href="/quiz/{{ level }}" class="level-btn">
+                <span>{{ level }} 도전하기</span>
+            </a>
             {% endfor %}
+            
+            <hr style="width: 100%; border: 0; border-top: 1px solid #eee; margin: 25px 0;">
+            
+            <a href="/history" class="level-btn history-btn">
+                📜 나의 점수 기록 보기
+            </a>
         </div>
     </div>
 </body>
