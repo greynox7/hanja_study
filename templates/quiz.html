@@ -87,12 +87,19 @@
             border-color: #2ecc71;
             color: white;
             box-shadow: 0 4px 10px rgba(46, 204, 113, 0.4);
+            font-weight: bold;
+        }
+        .option-btn.correct::after {
+            content: " ⭕";
         }
         .option-btn.wrong {
             background-color: #ff6b6b;
             border-color: #ff6b6b;
             color: white;
             animation: shake 0.4s;
+        }
+        .option-btn.wrong::after {
+            content: " ❌";
         }
         
         @keyframes shake {
@@ -251,7 +258,7 @@
 
             const buttons = document.querySelectorAll('.option-btn');
             
-            if (selected === correct) {
+            if (selected === correc.trim() === correct.trim()
                 btn.classList.add('correct');
                 score++;
             } else {
@@ -269,11 +276,11 @@
                 });
             }
 
-            // 1초 후 다음 문제
+            // 2초 후 다음 문제 (사용자가 정답을 확인할 시간 확보)
             setTimeout(() => {
                 currentQuestion++;
                 loadQuestion();
-            }, 1000); 
+            }, 2000); 
         }
 
         function showResult() {
