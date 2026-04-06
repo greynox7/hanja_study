@@ -301,5 +301,22 @@ HANJA_DATA = {
         {"hanja": "實", "mean": "열매 실"},
         {"hanja": "愛", "mean": "사랑 애"},
         {"hanja": "野", "mean": "들 야"}
+    ],
+    "5급": [
+        {"hanja": "可", "mean": "옳을 가"},
+        {"hanja": "加", "mean": "더할 가"},
+        {"hanja": "佳", "mean": "아름다울 가"},
+        {"hanja": "價", "mean": "값 가"},
+        {"hanja": "假", "mean": "거짓 가"},
+        {"hanja": "各", "mean": "각각 각"},
+        {"hanja": "覺", "mean": "깨달을 각"},
+        {"hanja": "干", "mean": "방패 간"},
+        {"hanja": "看", "mean": "볼 간"},
+        {"hanja": "簡", "mean": "대쪽 간"},
+        {"hanja": "檢", "mean": "검사할 검"},
+        {"hanja": "格", "mean": "격식 격"},
+        {"hanja": "見", "mean": "볼 견"},
+        {"hanja": "決", "mean": "결단할 결"},
+        {"hanja": "結", "mean": "맺을 결"}
     ]
 }
